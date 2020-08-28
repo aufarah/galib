@@ -23,6 +23,7 @@ Explanation about methods in `genetic`:
 
 
 ## How to Use
+0. Download this repo, and place `galib.py` into your project folder
 1. Import Ga-Lib, copy, and Numpy
     ```python
     import numpy as np
