@@ -3,15 +3,18 @@
 ## Introduction
 GA-Lib consists of a single class named `genetic`, which has arguments: `initialPop,numGeneration,numChild,numErase,bigBest,classModel`. These arguments are tuning parameters for genetic algorithm training, and class of model that will be trained. The `genetic` class **couldn't** be used by itself because it doesn't has 2 required methods: crossover and fitness-scoring, which is customizable. The `genetic` class acts as parent class fot user-created `trainer` class. Users must make another child class as `trainer` class by calling `super` and add those methods. Methods that already contained in "genetic" are: `train`, `sort`,`best`, and `kill`, and which should be created: `crossover` and `findfit`.
 
-Explanation about arguments in `genetic`:
+Arguments in `genetic`:
 * initialPop    : `(int)` How many individuals in 1st generation population (or initial population), how many elements in `population` array.
 * numGeneration : `(int)` How many generations (or epochs)
 * numChild : `(int)` How many new individuals created each generation
 * numErase: `(int)` How many new individuals eliminated each generation, based on their fitnesss score
 * bigBest: `(bool)` If True, then individual whose fitness score the biggest is the best individual. If False, then the smallest one is the best 
 
+Properties in `genetic`:
+* Every passed arguments, except `classModel`
+* `population` array, which hold individuals. Initially, number of individuals inside `population` is `initiapPop`.
 
-Explanation about methods in `genetic`:
+Methods in `genetic`:
 1. `__init__(initialPop,numGeneration,numChild,numErase,bigBest,classModel)`
     <br>`__init__` receive arguments and make `initialPop`s individuals, then save it in `population` array. 
 2. `sort(input,output)`
@@ -20,6 +23,12 @@ Explanation about methods in `genetic`:
     <br>`train` must be called if you want to start genetic algorithm
 4. `best()`
     <br> Get the best individuals
+    
+Other methods required and **should** be created:
+1. `crossover`
+    <br> `[No-Return method]` Perform operation by combining multiple individuals to make new individuals, and **append** new individuals to `population` array
+2. `findit`
+    <br> `[Return method]` Gets fitness score of every individuals in `population`, collects them in array and returns it. A returned array must in same size with `population` array and each element correspond to individual with the same index in `population` array. For example, `population[x]`'s fitness score value is in `fitness[x]`.
 
 
 ## How to Use
