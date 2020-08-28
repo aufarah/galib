@@ -4,7 +4,7 @@
 GA-Lib consists of a single class named `genetic`, which has arguments: `initialPop,numGeneration,numChild,numErase,bigBest,classModel`. These arguments are tuning parameters for genetic algorithm training, and class of model that will be trained. The `genetic` class **couldn't** be used by itself because it doesn't has 2 required methods: crossover and fitness-scoring, which is customizable. The `genetic` class acts as parent class fot user-created `trainer` class. Users must make another child class as `trainer` class by calling `super` and add those methods. Methods that already contained in "genetic" are: `train`, `sort`,`best`, and `kill`, and which should be created: `crossover` and `findfit`.
 
 Explanation about arguments in `genetic`:
-* initialPop    : `(int)` How many individuals in 1st generation population (or initial population)
+* initialPop    : `(int)` How many individuals in 1st generation population (or initial population), how many elements in `population` array.
 * numGeneration : `(int)` How many generations (or epochs)
 * numChild : `(int)` How many new individuals created each generation
 * numErase: `(int)` How many new individuals eliminated each generation, based on their fitnesss score
@@ -13,7 +13,7 @@ Explanation about arguments in `genetic`:
 
 Explanation about methods in `genetic`:
 1. `__init__(initialPop,numGeneration,numChild,numErase,bigBest,classModel)`
-    <br>`__init__` receive arguments and make `initialPop`s individuals, then save it in `population` property. 
+    <br>`__init__` receive arguments and make `initialPop`s individuals, then save it in `population` array. 
 2. `sort(input,output)`
     <br>`sort` receive fitness score and population array, and sort it based on fitness score from small value to big (ascending).
 3. `train()`
@@ -50,7 +50,8 @@ Explanation about methods in `genetic`:
         def __init__(self,initialPop,numGeneration,numChild,numErase,bigBest,classModel):
             super().__init__(initialPop,numGeneration,numChild,numErase,bigBest,classModel)
     ```
-    3. Then, define 2 required methods: `crossover` and `findfit`. Here for crossover, i choose *randomly-weighted average* combination from 2 individuals to make a new individual (or more), and for fitness-scoring, just a simple cost function with OR operation truth table reference. **notes**: output from `findfit` should be a numpy 1D array, which each element correspond to individual with the same index.
+    3. Then, define 2 required methods: `crossover` and `findfit`. Here for crossover, i choose *randomly-weighted average* combination from 2 individuals to make a new individual (or more), and for fitness-scoring, just a simple cost function with OR operation truth table reference. Adding mutation for new individuals is also available to be implemented in `crossover`.
+    <br>**notes**: output from `findfit` should be a numpy 1D array, which each element correspond to individual with the same index.
     
     ```python
     def crossover(self,population):
@@ -65,6 +66,9 @@ Explanation about methods in `genetic`:
             self.population = np.append(self.population,new_individu)
                 
     def findfit(self,population):
+            # fitness array length must be as same as population length, and each element correspond to individual with the same index in `population` array
+            # for example, population[x] fitness score value is in fitness[x].
+            
             fitness = np.array([])
             input = np.matrix([[0.,0.],
                                [0.,1.],
@@ -73,7 +77,7 @@ Explanation about methods in `genetic`:
             output = np.matrix([[0,1,1,1]]).T
 
             for individu in population:
-                    result = individu.forward(input)
+                    result = individu.forward(input)    
                     error = result - output
                     cost = error.T * error
                     cost = cost[0,0]
