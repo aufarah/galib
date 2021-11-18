@@ -12,8 +12,8 @@ class custom:
         return self.sigmoid(x * self.weight + self.bias)
     
 class test_galib(galib.genetic):
-    def __init__(self,initialPop,numGeneration,numChild,numErase,bigBest,classModel):
-        super().__init__(initialPop,numGeneration,numChild,numErase,bigBest,classModel)
+    def __init__(self,initialPop,numGeneration,numChild,numErase,bigBest,classModel,input,output):
+        super().__init__(initialPop,numGeneration,numChild,numErase,bigBest,classModel,input,output)
         
     def crossover(self,population):
         for child in range(self.numChild):
@@ -26,13 +26,8 @@ class test_galib(galib.genetic):
             new_individu.bias = (powera*new_individu.bias + power*self.population[x].bias) / 2
             self.population = np.append(self.population,new_individu)
 
-    def findfit(self,population):
+    def findfit(self,population,input,output):
         fitness = np.array([])
-        input = np.matrix([[0.,0.],
-                           [0.,1.],
-                           [1.,0.],
-                           [1.,1.]])
-        output = np.matrix([[0,1,1,1]]).T
                         
         for individu in population:
             result = individu.forward(input)
@@ -43,7 +38,12 @@ class test_galib(galib.genetic):
         return fitness
 
 if __name__ == "__main__":
-    tester = test_galib(initialPop=80,numGeneration=60,numChild=20,numErase=20,bigBest=False,classModel=custom)
+    inputtest = np.matrix([[0.,0.],
+                  [0.,1.],
+                  [1.,0.],
+                  [1.,1.]])
+    outputtest = np.matrix([[0,1,1,1]]).T
+    tester = test_galib(initialPop=80,numGeneration=60,numChild=20,numErase=20,bigBest=False,classModel=custom,input=inputtest,output=outputtest)
     tester.train()
 
     input = np.matrix([[0.,0.],
