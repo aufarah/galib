@@ -2,13 +2,15 @@ import numpy as np
 import copy
     
 class genetic:
-    def __init__(self,initialPop,numGeneration,numChild,numErase,bigBest,classModel):
+    def __init__(self,initialPop,numGeneration,numChild,numErase,bigBest,classModel,input,output):
         self.population = np.array([])
         self.numGeneration = numGeneration
         self.numChild = numChild
         self.numErase = numErase
         self.initialPop = initialPop
         self.bigBest = bigBest
+        self.input = input
+        self.output = output
         for i in range(self.initialPop):
             self.population = np.append(self.population, classModel())
 
@@ -28,7 +30,7 @@ class genetic:
             self.crossover(self.population)
 
             #find fitness of populations
-            fitness = self.findfit(self.population)
+            fitness = self.findfit(self.population,self.input,self.output)
 
             #sorting (ascending)
             self.sort(self.population,fitness)
